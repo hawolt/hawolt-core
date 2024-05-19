@@ -57,6 +57,17 @@ public class Hikari {
         return hikari;
     }
 
+    public static void shutdown() {
+        for (Hikari hikari : CONNECTION_MANAGERS.values()) {
+            try {
+                if (!hikari.source.isClosed()) hikari.source.close();
+            } catch (Exception e) {
+                System.err.println("Failed to shutdown a Hikari source");
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+
     public Connection getConnection() throws SQLException {
         return source.getConnection();
     }
